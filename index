@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Credit Loading System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Load Credits</h2>
+        <form action="add_credits.php" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="credits">Credits:</label>
+                <input type="number" step="0.01" id="credits" name="credits" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Load Credits</button>
+        </form>
+        <a href="view_users.php" class="btn btn-secondary">View Users and Credits</a>
+        <a href="view_weekly_credits.php" class="btn btn-secondary">View Weekly Credits</a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
