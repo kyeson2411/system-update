@@ -1,0 +1,42 @@
+public function addCredits($username, $credits) {
+    // Existing code...
+
+    $stmt->execute();
+    $stmt->close();
+
+    $this->logWeeklyCredits($credits);
+}
+
+private function logWeeklyCredits($credits) {
+    $currentDate = new DateTime();
+    $weekStartDate = $currentDate->modify('this week')->format('Y-m-d');
+    $weekEndDate = $currentDate->modify('this week +6 days')->format('Y-m-d');
+
+    // Check if the current week already has an entry in `weekly_credits`
+    $stmt = $this->conn->prepare("SELECT * FROM weekly_credits WHERE week_start_date = ? AND week_end_date = ?");
+    $stmt->bind_param("ss", $weekStartDate, $weekEndDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Update existing entry
+        $stmt = $this->conn->prepare("UPDATE weekly_credits SET total_credits_added = total_credits_added + ?, user_count = user_count + 1 WHERE week_start_date = ? AND week_end_date = ?");
+        $stmt->bind_param("dss", $credits, $weekStartDate, $weekEndDate);
+    } else {
+        // Create new entry
+        $userCount = 1;
+        $stmt = $this->conn->prepare("INSERT INTO weekly_credits (week_start_date, week_end_date, total_credits_added, user_count) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssdi", $weekStartDate, $weekEndDate, $credits, $userCount);
+    }
+
+    $stmt->execute();
+    $stmt->close();
+}
+
+public function getWeeklyCredits() {
+    $stmt = $this->conn->prepare("SELECT * FROM weekly_credits ORDER BY week_start_date DESC");
+    $stmt->execute();
+    $result = $stmt->get_result();
+     $stmt->close();
+     return $result;
+ }
